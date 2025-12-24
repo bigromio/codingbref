@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استمارة تفاصيل المشروع</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #2c3e50; --accent: #8c7355; --bg: #f4f6f8; }
+        body { font-family: 'Tajawal', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); position: relative; }
+        
+        /* Admin Lock */
+        .admin-lock { position: absolute; top: 20px; left: 20px; cursor: pointer; color: #ddd; font-size: 18px; transition: 0.3s; }
+        .admin-lock:hover { color: #555; }
+        .unlocked { color: #27ae60 !important; }
+        .editable[contenteditable="true"] { border: 1px dashed #f39c12; background: #fffdf5; padding: 0 5px; }
+
+        /* Headers */
+        .header { text-align: center; border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { color: var(--primary); margin: 0; font-size: 26px; }
+        h2 { font-size: 18px; background: var(--primary); color: white; padding: 10px 15px; border-radius: 6px; margin-top: 35px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Form Fields */
+        .section-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .form-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 250px; }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #555; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Tajawal'; box-sizing: border-box; transition: 0.2s; }
+        .form-control:focus { border-color: var(--accent); outline: none; }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+
+        /* Project Type Toggle */
+        .type-toggle { display: flex; gap: 15px; margin-bottom: 20px; }
+        .type-option { flex: 1; border: 2px solid #ddd; border-radius: 8px; padding: 15px; cursor: pointer; text-align: center; transition: 0.3s; position: relative; }
+        .type-option:hover { border-color: var(--accent); background: #fdfbf7; }
+        .type-option.active { border-color: var(--accent); background: #fdfbf7; color: var(--accent); font-weight: bold; box-shadow: 0 0 0 1px var(--accent); }
+        .type-option i { font-size: 24px; margin-bottom: 10px; display: block; }
+        .type-option input { position: absolute; opacity: 0; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #eee; padding: 12px; text-align: right; }
+        th { background: #f8f9fa; color: #555; font-size: 14px; }
+        .price-cell { font-weight: bold; color: var(--accent); direction: ltr; text-align: left; width: 100px; }
+
+        /* Summary */
+        .summary-box { background: #2c3e50; color: white; padding: 25px; border-radius: 8px; margin-top: 30px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 16px; }
+        .total-row { font-size: 24px; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; margin-top: 10px; }
+
+        .btn-submit { background: var(--accent); color: white; width: 100%; padding: 16px; border: none; font-size: 18px; border-radius: 8px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        .btn-submit:hover { background: #7a6348; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <i class="fas fa-lock admin-lock" id="lockBtn" onclick="toggleEditMode()" title="تعديل الأسعار"></i>
+
+    <form id="projectForm" onsubmit="submitForm(event)">
+        
+        <div class="header">
+            <h1><span class="editable" id="formTitle">استمارة طلب مشروع تقني</span></h1>
+            <p class="editable">نحول فكرتك إلى واقع رقمي متكامل</p>
+        </div>
+
+        <div class="section-box">
+            <h3 style="margin-top:0"><i class="fas fa-user-circle"></i> بيانات التواصل</h3>
+            <div class="form-row">
+                <div class="col"><label class="form-label">الاسم الكريم</label><input type="text" class="form-control" name="clientName" required></div>
+                <div class="col"><label class="form-label">رقم الجوال</label><input type="tel" class="form-control" name="phone" required></div>
+            </div>
+            <div class="form-row" style="margin-top:15px;">
+                <div class="col"><label class="form-label">البريد الإلكتروني</label><input type="email" class="form-control" name="email" required></div>
+            </div>
+        </div>
+
+        <h2><i class="fas fa-layer-group"></i> نوع المشروع والنطاق</h2>
+        <div class="section-box">
+            <label class="form-label">اختر نوع المنصة الأنسب لميزانيتك:</label>
+            <div class="type-toggle">
+                <label class="type-option active" id="optNative" onclick="selectType('Native')">
+                    <input type="radio" name="projectType" value="Native App" checked>
+                    <i class="fab fa-apple"></i> <i class="fab fa-android"></i>
+                    تطبيق جوال (Native)<br>
+                    <small style="font-weight:normal; font-size:12px;">أداء عالي، إشعارات، متجر أبل وجوجل</small>
+                </label>
+                
+                <label class="type-option" id="optWeb" onclick="selectType('Web')">
+                    <input type="radio" name="projectType" value="Web App">
+                    <i class="fas fa-globe"></i>
+                    ويب أب (Web Application)<br>
+                    <small style="font-weight:normal; font-size:12px;">موقع متطور يعمل كتطبيق، تكلفة أقل</small>
+                </label>
+            </div>
+
+            <div style="background:#fdfbf7; padding:15px; border-left:4px solid var(--accent);">
+                <strong>تكلفة التأسيس المبدئية لهذا النوع: </strong>
+                <span class="editable price-val" id="basePriceDisplay">35000</span> ريال
+                
+                <span id="priceNativeHidden" style="display:none;">35000</span>
+                <span id="priceWebHidden" style="display:none;">12000</span>
+            </div>
+        </div>
+
+        <h2><i class="fas fa-lightbulb"></i> تفاصيل الفكرة</h2>
+        <div class="section-box">
+            <div class="form-group">
+                <label class="form-label">اشرح فكرة المشروع باختصار:</label>
+                <textarea class="form-control" name="description" placeholder="مثلاً: تطبيق يجمع بين بائعي الإبل والمشترين مع وجود مزادات..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">هل يوجد تطبيقات مشابهة أو منافسة؟ (للفهم والاستلهام):</label>
+                <textarea class="form-control" name="refApps" placeholder="مثلاً: يشبه تطبيق حراج ولكن متخصص في..."></textarea>
+            </div>
+        </div>
+
+        <h2><i class="fas fa-puzzle-piece"></i> الميزات الإضافية</h2>
+        <p style="font-size:13px; color:#666;">حدد الميزات التي يحتاجها مشروعك حالياً:</p>
+        
+        <div class="section-box" style="padding:0; overflow:hidden;">
+            <table id="featuresTable">
+                <tbody>
+                    <tr>
+                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+                        <td class="editable"><strong>تنبيهات واتساب الذكية</strong><br><small style="color:#777;">إرسال تحديثات الطلبات للعملاء عبر واتساب تلقائياً</small></td>
+                        <td class="editable price-val price-cell" oninput="calc()">2000</td>
+                    </tr>
+                    <tr>
+                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+                        <td class="editable">بوابات دفع إلكتروني (Visa/Mada/ApplePay)</td>
+                        <td class="editable price-val price-cell" oninput="calc()">6500</td>
+                    </tr>
+                    <tr>
+                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+                        <td class="editable">نظام المحادثة الفورية (Chat)</td>
+                        <td class="editable price-val price-cell" oninput="calc()">5000</td>
+                    </tr>
+                    <tr>
+                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+                        <td class="editable">خرائط وتتبع جغرافي (Maps)</td>
+                        <td class="editable price-val price-cell" oninput="calc()">3500</td>
+                    </tr>
+                    <tr>
+                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+                        <td class="editable">لوحة تحكم (Dashboard) متقدمة للإدارة</td>
+                        <td class="editable price-val price-cell" oninput="calc()">4000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-row"><span>التأسيس والبرمجة:</span><span id="sumBase">35,000</span></div>
+            <div class="summary-row"><span>الإضافات المختارة:</span><span id="sumAddons">0</span></div>
+            <div class="total-row">
+                <span>الإجمالي التقديري:</span>
+                <span id="sumTotal" style="float:left;">35,000 ريال</span>
+            </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-submit">حفظ الطلب وإرسال العرض</button>
+        <p id="statusMsg" style="text-align:center; margin-top:10px; display:none;"></p>
+
+    </form>
+</div>
+
+<script>
+    let isEditMode = false;
+    let currentType = 'Native';
+
+    // 1. تبديل نوع المشروع
+    function selectType(type) {
+        currentType = type;
+        
+        // UI Update
+        document.querySelectorAll('.type-option').forEach(el => el.classList.remove('active'));
+        document.getElementById(type === 'Native' ? 'optNative' : 'optWeb').classList.add('active');
+        
+        // Price Update logic
+        // نأخذ السعر من العناصر المخفية (التي يمكن تعديلها في وضع الأدمن)
+        const priceNative = document.getElementById('priceNativeHidden').innerText;
+        const priceWeb = document.getElementById('priceWebHidden').innerText;
+        
+        const displayElem = document.getElementById('basePriceDisplay');
+        displayElem.innerText = (type === 'Native' ? priceNative : priceWeb);
+        
+        calc(); // إعادة حساب الإجمالي
+    }
+
+    // 2. الحساب
+    function calc() {
+        // تنظيف الرقم من النصوص (مثلاً "2000" أو "2,000")
+        const cleanNum = (str) => parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+
+        const basePrice = cleanNum(document.getElementById('basePriceDisplay').innerText);
+        
+        let addons = 0;
+        document.querySelectorAll('.f-check:checked').forEach(chk => {
+            const row = chk.closest('tr');
+            const price = cleanNum(row.querySelector('.price-val').innerText);
+            addons += price;
+        });
+
+        document.getElementById('sumBase').innerText = basePrice.toLocaleString();
+        document.getElementById('sumAddons').innerText = addons.toLocaleString();
+        document.getElementById('sumTotal').innerText = (basePrice + addons).toLocaleString() + ' ريال';
+    }
+
+    // 3. وضع التعديل (Admin)
+    function toggleEditMode() {
+        if (!isEditMode) {
+            const pass = prompt("كلمة مرور المطور:");
+            if (pass === "8360") {
+                setEdit(true);
+            }
+        } else {
+            // عند القفل، نقوم بتحديث القيم المخفية بناءً على ما تم تعديله في الظاهر
+            // للحفاظ على التعديلات عند التبديل بين الأنواع
+            const currentVisiblePrice = document.getElementById('basePriceDisplay').innerText;
+            if(currentType === 'Native') {
+                document.getElementById('priceNativeHidden').innerText = currentVisiblePrice;
+            } else {
+                document.getElementById('priceWebHidden').innerText = currentVisiblePrice;
+            }
+            
+            setEdit(false);
+        }
+    }
+
+    function setEdit(enable) {
+        isEditMode = enable;
+        const lock = document.getElementById('lockBtn');
+        const editables = document.querySelectorAll('.editable');
+        // أيضاً نسمح بتعديل الأسعار المخفية عشان نغير ديفولت الويب والتطبيق
+        const hiddenPrices = [document.getElementById('priceNativeHidden'), document.getElementById('priceWebHidden')];
+
+        if (enable) {
+            lock.classList.add('unlocked');
+            editables.forEach(e => e.setAttribute('contenteditable', 'true'));
+            
+            // إظهار الأسعار المخفية للتعديل
+            hiddenPrices.forEach(e => {
+                e.style.display = 'inline-block';
+                e.style.border = '1px solid red';
+                e.style.margin = '0 5px';
+                e.setAttribute('contenteditable', 'true');
+            });
+
+        } else {
+            lock.classList.remove('unlocked');
+            editables.forEach(e => e.setAttribute('contenteditable', 'false'));
+            
+            // إخفاء الأسعار المخفية
+            hiddenPrices.forEach(e => {
+                e.style.display = 'none';
+                e.setAttribute('contenteditable', 'false');
+            });
+            calc();
+        }
+    }
+
+    // 4. الإرسال
+    // 4. الإرسال (المعدل ليعمل مع GitHub Pages)
+    function submitForm(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('statusMsg');
+        
+        btn.disabled = true;
+        btn.innerText = "جاري الاتصال بالسيرفر...";
+        msg.style.display = 'block';
+        msg.innerText = "يرجى الانتظار، يتم حفظ البيانات...";
+        msg.style.color = "#666";
+
+        // رابط السكربت الذي نسخته من خطوة النشر
+        // هام: استبدل الرابط أدناه برابطك الخاص
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2WFfelHZ8-IkInzkrl11NmiGXADRLzPj9HAyIQe7sofBKEqYt1eJtirdBUL5A615fmg/exec";
+
+        // جمع البيانات
+        const form = document.getElementById('projectForm');
+        let features = [];
+        document.querySelectorAll('.f-check:checked').forEach(chk => {
+            const row = chk.closest('tr');
+            features.push({
+                name: row.cells[1].innerText.split('\n')[0],
+                price: row.cells[2].innerText
+            });
+        });
+
+        const dataToSend = {
+            clientName: form.clientName.value,
+            phone: form.phone.value,
+            email: form.email.value,
+            description: form.description.value,
+            refApps: form.refApps.value,
+            projectType: currentType,
+            projectName: document.getElementById('formTitle').innerText,
+            basePrice: document.getElementById('basePriceDisplay').innerText,
+            totalPrice: document.getElementById('sumTotal').innerText,
+            features: features
+        };
+
+        // إرسال البيانات باستخدام Fetch API
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            // نستخدم text/plain لتجنب مشاكل الـ CORS، السيرفر سيعالجها كـ JSON
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => response.json())
+        .then(res => {
+            if(res.success) {
+                document.querySelector('.container').innerHTML = `
+                    <div style="text-align:center; padding:40px;">
+                        <i class="fas fa-check-circle" style="font-size:50px; color:#27ae60; margin-bottom:20px;"></i>
+                        <h2 style="color:#2c3e50;">تم استلام الطلب بنجاح!</h2>
+                        <p>تم إرسال تفاصيل العرض إلى بريدك الإلكتروني.</p>
+                        <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; border:none; background:#eee; cursor:pointer;">عودة</button>
+                    </div>
+                `;
+            } else {
+                msg.innerText = "خطأ: " + res.message;
+                msg.style.color = "red";
+                btn.disabled = false;
+                btn.innerText = "حاول مرة أخرى";
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            msg.innerText = "حدث خطأ في الاتصال، تأكد من الإنترنت.";
+            msg.style.color = "red";
+            btn.disabled = false;
+            btn.innerText = "حاول مرة أخرى";
+        });
+    }
+    
+    </script>
+
+</body>
+</html>
