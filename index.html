@@ -56,7 +56,10 @@
     </style>
 </head>
 <body>
-
+<div style="display:none; visibility:hidden;">
+  <label>Don't fill this field</label>
+  <input type="text" name="honeypot" id="honeypot_field">
+</div>
 <div class="container">
     <i class="fas fa-lock admin-lock" id="lockBtn" onclick="toggleEditMode()" title="تعديل الأسعار"></i>
 
@@ -371,6 +374,7 @@
             projectName: document.getElementById('formTitle').innerText,
             basePrice: document.getElementById('basePriceDisplay').innerText,
             totalPrice: document.getElementById('sumTotal').innerText,
+            honeypot: document.getElementById('honeypot_field').value,
             features: features
         };
 
