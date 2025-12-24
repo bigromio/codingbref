@@ -110,7 +110,7 @@
         <div class="section-box">
             <div class="form-group">
                 <label class="form-label">اشرح فكرة المشروع باختصار:</label>
-                <textarea class="form-control" name="description" placeholder="مثلاً: تطبيق يجمع بين بائعي الإبل والمشترين مع وجود مزادات..."></textarea>
+                <textarea class="form-control" name="description" placeholder="مثلاً: تطبيق يجمع بين بائعي  والمشترين مع وجود مزادات..."></textarea>
             </div>
             <div class="form-group">
                 <label class="form-label">هل يوجد تطبيقات مشابهة أو منافسة؟ (للفهم والاستلهام):</label>
@@ -122,35 +122,105 @@
         <p style="font-size:13px; color:#666;">حدد الميزات التي يحتاجها مشروعك حالياً:</p>
         
         <div class="section-box" style="padding:0; overflow:hidden;">
-            <table id="featuresTable">
-                <tbody>
-                    <tr>
-                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
-                        <td class="editable"><strong>تنبيهات واتساب الذكية</strong><br><small style="color:#777;">إرسال تحديثات الطلبات للعملاء عبر واتساب تلقائياً</small></td>
-                        <td class="editable price-val price-cell" oninput="calc()">2000</td>
-                    </tr>
-                    <tr>
-                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
-                        <td class="editable">بوابات دفع إلكتروني (Visa/Mada/ApplePay)</td>
-                        <td class="editable price-val price-cell" oninput="calc()">6500</td>
-                    </tr>
-                    <tr>
-                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
-                        <td class="editable">نظام المحادثة الفورية (Chat)</td>
-                        <td class="editable price-val price-cell" oninput="calc()">5000</td>
-                    </tr>
-                    <tr>
-                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
-                        <td class="editable">خرائط وتتبع جغرافي (Maps)</td>
-                        <td class="editable price-val price-cell" oninput="calc()">3500</td>
-                    </tr>
-                    <tr>
-                        <td style="width:40px; text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
-                        <td class="editable">لوحة تحكم (Dashboard) متقدمة للإدارة</td>
-                        <td class="editable price-val price-cell" oninput="calc()">4000</td>
-                    </tr>
-                </tbody>
-            </table>
+<table id="featuresTable">
+    <thead>
+        <tr>
+            <th style="width:40px;">اختر</th>
+            <th>تفاضيل الميزة</th>
+            <th style="width:120px;">السعر (ريال)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="background-color:#f9f9f9;"><td colspan="3"><strong>1. الوسائط والعرض المرئي</strong></td></tr>
+        
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>رفع فيديو للإعلان</strong>
+                <br><small style="color:#777;">تمكين البائع من رفع فيديو يوضح حركة  (يتطلب سيرفرات خاصة)</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">4500</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>نظام "القصص" (Stories)</strong>
+                <br><small style="color:#777;">عرض يوميات المربين والتجار في أعلى التطبيق لمدة 24 ساعة</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">5500</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>محرر صور + علامة مائية</strong>
+                <br><small style="color:#777;">إضافة شعار التطبيق أو اسم البائع تلقائياً على الصور لحفظ الحقوق</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">2500</td>
+        </tr>
+
+        <tr style="background-color:#f9f9f9;"><td colspan="3"><strong>2. البيع والمزادات</strong></td></tr>
+
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>نظام مزادات حية (Live Auctions)</strong>
+                <br><small style="color:#777;">بث مباشر للمزاد مع إمكانية المزايدة اللحظية (ميزة متقدمة)</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">12000</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>بوابات دفع وسداد</strong>
+                <br><small style="color:#777;">الربط مع مدى، فيزا، Apple Pay لتوثيق الجدية أو دفع العربون</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">6500</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>محفظة إلكترونية داخلية</strong>
+                <br><small style="color:#777;">رصيد للمستخدم داخل التطبيق يمكن شحنه واستخدامه</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">5000</td>
+        </tr>
+
+        <tr style="background-color:#f9f9f9;"><td colspan="3"><strong>3. التواصل والثقة</strong></td></tr>
+
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>توثيق الهوية (نفاذ)</strong>
+                <br><small style="color:#777;">التحقق من هوية البائعين عبر النفاذ الوطني لزيادة الموثوقية</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">5000</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>تنبيهات واتساب الذكية</strong>
+                <br><small style="color:#777;">إرسال تفاصيل البيع والشراء للعملاء عبر واتساب تلقائياً</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">2000</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>الخرائط المتقدمة (GPS)</strong>
+                <br><small style="color:#777;">تحديد موقع  في الصحراء بدقة وتوجيه المشتري لها</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">3500</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><input type="checkbox" class="f-check" onchange="calc()"></td>
+            <td class="editable">
+                <strong>نظام المحادثة (Chat)</strong>
+                <br><small style="color:#777;">شات كتابي وصوتي داخل التطبيق بين البائع والمشتري</small>
+            </td>
+            <td class="editable price-val price-cell" oninput="calc()">4500</td>
+        </tr>
+    </tbody>
+</table>
         </div>
 
         <div class="summary-box">
